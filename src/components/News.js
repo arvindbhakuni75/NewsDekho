@@ -24,44 +24,55 @@ export class News extends Component {
     };
   }
 
-  async componentDidMount() {
+  async updateNews () {
     let url =
-      `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=45d17088ea4a48aa85c8fbcbad1d4fdf&page=1&pageSize=${this.props.pageSize}`;
-    this.setState({loading: true})
+      `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=45d17088ea4a48aa85c8fbcbad1d4fdf&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    this.setState({loading: true});
     let data = await fetch(url);
     let parsedData = await data.json();
-    this.setState({ articles: parsedData.articles, 
+    console.log(parsedData)
+    this.setState ({
+      articles: parsedData.articles,
       totalResults: parsedData.totalResults,
-      loading: false});
+      loading: false
+    })
+  }
+
+  async componentDidMount() {
+    this.updateNews();
   }
 
   handlePreClick = async () => {
     console.log("Previous");
-    let url =
-      `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=45d17088ea4a48aa85c8fbcbad1d4fdf&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
-    this.setState({loading: true});
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState ({
-      page: this.state.page - 1,
-      articles: parsedData.articles,
-      loading: false
-    })
+    // let url =
+    //   `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=45d17088ea4a48aa85c8fbcbad1d4fdf&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
+    // this.setState({loading: true});
+    // let data = await fetch(url);
+    // let parsedData = await data.json();
+    // this.setState ({
+    //   page: this.state.page - 1,
+    //   articles: parsedData.articles,
+    //   loading: false
+    // })
+    this.setState({page: this.state.page -1})
+    this.updateNews();
   };
 
   handleNextClick = async () => {
     
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=45d17088ea4a48aa85c8fbcbad1d4fdf&page=${
-      this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=45d17088ea4a48aa85c8fbcbad1d4fdf&page=${
+    //   this.state.page + 1}&pageSize=${this.props.pageSize}`;
     
-    this.setState({loading: true});
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState({
-      page: this.state.page + 1,
-      articles: parsedData.articles,
-      loading: false
-    });
+    // this.setState({loading: true});
+    // let data = await fetch(url);
+    // let parsedData = await data.json();
+    // this.setState({
+    //   page: this.state.page + 1,
+    //   articles: parsedData.articles,
+    //   loading: false
+    // });
+    this.setState({page: this.state.page +1})
+    this.updateNews();
   };
 
   render() {
@@ -82,6 +93,8 @@ export class News extends Component {
                       : "https://st1.bgr.in/wp-content/uploads/2023/01/Tecno-Phantom-X2-6.jpg"
                   }
                   newsUrl={element.url}
+                  author = {element.author} date = {element.publishedAt}
+                  source = {element.source.name}
                 />
               </div>
             );
